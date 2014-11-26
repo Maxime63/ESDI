@@ -6,6 +6,11 @@ public class Data {
 	private int scenarios;
 	private int investissements;
 	
+	public Data()
+	{
+		
+	}
+	
 	public Data(int periodes, int produits, int scenarios, int investissements){
 		this.periodes = periodes;
 		this.produits = produits;
@@ -24,5 +29,21 @@ public class Data {
 	}
 	public int getInvestissements() {
 		return investissements;
+	}
+	
+	public void setPeriodes(int a) {
+		periodes=a;
+	}
+	
+	public void setProduits(int a) {
+		produits=a;
+	}
+	
+	public void setScenarios(int a) {
+		scenarios=a;
+	}
+	
+	public void setInvestissements(int a) {
+		investissements=a;
 	}
 }
