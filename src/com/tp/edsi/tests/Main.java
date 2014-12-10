@@ -74,5 +74,11 @@ public class Main {
 		br.close();
 		
 	}
+	
+	private static void writedata(String filename,Data data)
+	{
+		
+		
+	}
 
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
-	private int periodes;
+	private int nbperiodes;
 	private int produits;
 	private int scenarios;
 	private int investissements;
@@ -13,15 +13,16 @@ public class Data {
 	private int prix_B;
 	private int amort;
 	private int stockage;
-	private List<Periode> periode;
+	private List<Periode> periodes;
 	
 	public Data()
 	{
 		this.invests=new ArrayList<Investissements>();
+		this.periodes=new ArrayList<Periode>();
 	}
 	
 	public Data(int periodes, int produits, int scenarios, int investissements){
-		this.periodes = periodes;
+		this.nbperiodes = periodes;
 		this.produits = produits;
 		this.scenarios = scenarios;
 		this.investissements = investissements;
@@ -29,7 +30,7 @@ public class Data {
 	}
 	
 	public int getPeriodes() {
-		return periodes;
+		return nbperiodes;
 	}
 	public int getProduits() {
 		return produits;
@@ -42,7 +43,7 @@ public class Data {
 	}
 	
 	public void setPeriodes(int a) {
-		periodes=a;
+		nbperiodes=a;
 	}
 	
 	public void setProduits(int a) {
@@ -100,6 +101,6 @@ public class Data {
 		Periode p=new Periode();
 		p.setProduitA(a, b, c);
 		p.setProduitB(d, e, f);
-		periode.add(p);
+		periodes.add(p);
 	}
 }
