@@ -1,28 +1,23 @@
 package com.tp.edsi.metier;
 
 public class Periode {
-	private int[] produitA;
-	private int[] produitB;
+	private int[][] demande;
 	
 	public Periode()
 	{
-		produitA=new int[3];
-		produitB=new int[3];
+		demande = new int[2][3];
 	}
 	
-	public void setProduitA(int a,int b,int c)
+	
+	public void setDemande(int produit,int scenario,int valeur)
 	{
-		produitA[0]=a;
-		produitA[1]=b;
-		produitA[2]=c;
+		demande[produit][scenario]=valeur;
 		
 	}
 
-	public void setProduitB(int a,int b,int c)
+	public int getDemande(int produit,int scenario)
 	{
-		produitB[0]=a;
-		produitB[1]=b;
-		produitB[2]=c;
+		return demande[produit][scenario];
 		
 	}
 }

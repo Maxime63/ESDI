@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Data {
-	private int nbperiodes;
-	private int produits;
-	private int scenarios;
-	private int investissements;
+	private int nbPeriodes;
+	private int nbProduits;
+	private int nbScenarios;
+	private int nbInvestissements;
 	private List<Investissements> invests;
-	private int prix_A;
-	private int prix_B;
+	private List<Integer> prixVente;
 	private int amort;
 	private int stockage;
 	private List<Periode> periodes;
@@ -19,59 +18,59 @@ public class Data {
 	{
 		this.invests=new ArrayList<Investissements>();
 		this.periodes=new ArrayList<Periode>();
+		this.prixVente=new ArrayList<Integer>();
 	}
 	
 	public Data(int periodes, int produits, int scenarios, int investissements){
-		this.nbperiodes = periodes;
-		this.produits = produits;
-		this.scenarios = scenarios;
-		this.investissements = investissements;
+		this.nbPeriodes = periodes;
+		this.nbProduits = produits;
+		this.nbScenarios = scenarios;
+		this.nbInvestissements = investissements;
 		this.invests=new ArrayList<Investissements>();
 	}
 	
-	public int getPeriodes() {
-		return nbperiodes;
+	public int getNbPeriodes() {
+		return nbPeriodes;
 	}
-	public int getProduits() {
-		return produits;
+	
+	public Periode getPeriode(int index){
+		return periodes.get(index);
+	}
+	
+	public Investissements getInvests(int index)
+	{
+		return invests.get(index);
+	}
+	
+	public int getNbProduits() {
+		return nbProduits;
 	}
 	public int getScenarios() {
-		return scenarios;
+		return nbScenarios;
 	}
-	public int getInvestissements() {
-		return investissements;
-	}
-	
-	public void setPeriodes(int a) {
-		nbperiodes=a;
+	public int getNbInvestissements() {
+		return nbInvestissements;
 	}
 	
-	public void setProduits(int a) {
-		produits=a;
+	public void setNbPeriodes(int nbPeriodes) {
+		this.nbPeriodes=nbPeriodes;
 	}
 	
-	public void setScenarios(int a) {
-		scenarios=a;
+	public void setNbProduits(int nbProduits) {
+		this.nbProduits=nbProduits;
 	}
 	
-	public void setInvestissements(int a) {
-		investissements=a;
+	public void setNbScenarios(int nbScenarios) {
+		this.nbScenarios=nbScenarios;
 	}
 	
-	public int getPrix_A() {
-		return prix_A;
+	public void setNbInvestissements(int nbInvestisements) {
+		this.nbInvestissements=nbInvestisements;
 	}
-
-	public void setPrix_A(int prix_A) {
-		this.prix_A = prix_A;
-	}
-
-	public int getPrix_B() {
-		return prix_B;
-	}
-
-	public void setPrix_B(int prix_B) {
-		this.prix_B = prix_B;
+	
+	public int getPrixVente(int index)
+	{
+		return prixVente.get(index);
 	}
 
 	public int getAmort() {
@@ -99,8 +98,18 @@ public class Data {
 	public void setPeriode(int a,int b ,int c,int d,int e,int f)
 	{
 		Periode p=new Periode();
-		p.setProduitA(a, b, c);
-		p.setProduitB(d, e, f);
+		p.setDemande(0, 0, a);
+		p.setDemande(0, 1, b);
+		p.setDemande(0, 2, c);
+		p.setDemande(1, 0, d);
+		p.setDemande(1, 1, e);
+		p.setDemande(1, 2, f);
 		periodes.add(p);
 	}
+
+	public void setPrixVente(int prix) {
+		// TODO Auto-generated method stub
+		prixVente.add(prix);
+	}
+	
 }
