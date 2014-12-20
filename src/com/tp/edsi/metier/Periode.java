@@ -1,23 +1,22 @@
 package com.tp.edsi.metier;
 
 public class Periode {
-	private int[][] demande;
+	int nbProduits;
+	int nbScenarios;
+	int [][] demandes;
 	
-	public Periode()
-	{
-		demande = new int[2][3];
+	public Periode(int nbProduits, int nbScenarios){
+		this.nbProduits = nbProduits;
+		this.nbScenarios =  nbScenarios;
+		
+		demandes = new int[nbProduits][nbScenarios];
 	}
 	
-	
-	public void setDemande(int produit,int scenario,int valeur)
-	{
-		demande[produit][scenario]=valeur;
-		
+	public int getDemande(int produit, int scenario){
+		return demandes[produit][scenario];
 	}
-
-	public int getDemande(int produit,int scenario)
-	{
-		return demande[produit][scenario];
-		
+	
+	public void setDemande(int produit, int scenario, int demande){
+		demandes[produit][scenario] = demande;
 	}
 }
