@@ -11,6 +11,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import ilog.concert.IloException;
+import ilog.concert.IloNumVar;
+import ilog.concert.IloRange;
 import ilog.cplex.IloCplex;
 
 import com.tp.edsi.metier.Data;
@@ -22,8 +24,9 @@ public class Solver {
 	private Data data;
 	private String lpFilename;
 	
-	public Solver() throws IloException{
-//		cplex = new IloCplex();
+	public Solver(String filename) throws IloException{
+		cplex = new IloCplex();
+		lpFilename=filename;
 	}
 	
 	public Data getData(){
@@ -34,7 +37,9 @@ public class Solver {
 		cplex.exportModel(lpFilename);
 		
 		if(cplex.solve()){
+			System.out.println(cplex.getObjValue());
 		}
+		
 	}
 	
 	public void loadData(String filename) throws IOException{
@@ -125,8 +130,8 @@ public class Solver {
 		br.close();
 	}
 	
-	public void createLpFile(String filename, int investissement, int scenario) throws IOException{
-		OutputStream ops = new FileOutputStream(filename); 
+	public void createLpFile(int investissement, int scenario) throws IOException{
+		OutputStream ops = new FileOutputStream(lpFilename); 
 		OutputStreamWriter opsw = new OutputStreamWriter(ops);
 		BufferedWriter bw = new BufferedWriter(opsw);
 		
