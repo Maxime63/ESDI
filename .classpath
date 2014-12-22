@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Cplex/IBM/ILOG/CPLEX_Studio_Preview126/cplex/lib/cplex.jar">
+	<classpathentry kind="lib" path="E:/Programmes/Cplex64/cplex/lib/cplex.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/Program Files/IBM/ILOG/CPLEX_Studio_Preview126/cplex/bin/x64_win64"/>
 		</attributes>

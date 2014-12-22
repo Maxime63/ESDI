@@ -11,8 +11,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import ilog.concert.IloException;
-import ilog.concert.IloNumVar;
-import ilog.concert.IloRange;
 import ilog.cplex.IloCplex;
 
 import com.tp.edsi.metier.Data;
@@ -34,10 +32,12 @@ public class Solver {
 	}
 	
 	public void solve() throws IloException{
-		cplex.exportModel(lpFilename);
+		cplex.importModel(lpFilename);
 		
 		if(cplex.solve()){
-			System.out.println(cplex.getObjValue());
+            cplex.output().println("Solution status = " + cplex.getStatus());
+            cplex.output().println("Solution value  = " + cplex.getObjValue());
+
 		}
 		
 	}
