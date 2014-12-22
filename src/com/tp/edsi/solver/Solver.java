@@ -20,26 +20,45 @@ import com.tp.edsi.metier.Periode;
 public class Solver {
 	private IloCplex cplex;
 	private Data data;
-	private String lpFilename;
+	private String [][] matriceLpFilename;
+	private String [][] matriceResultats;
 	
-	public Solver(String filename) throws IloException{
+	public Solver() throws IloException{
 		cplex = new IloCplex();
-		lpFilename=filename;
 	}
 	
 	public Data getData(){
 		return data;
 	}
 	
-	public void solve() throws IloException{
+	public void solveProblem() throws IloException, IOException{
+		int nbScenarios = data.getNbScenarios();
+		int nbInvestissements = data.getNbInvestissements();
+		
+		for(int i = 0; i < nbInvestissements; i++){
+			for(int j = 0; j < nbScenarios; j++){
+				String lpFilename = "solve_" + i + "_" + j + ".lp";
+				matriceLpFilename[i][j] = lpFilename;
+				solve(lpFilename, i, j);
+			}
+		}
+	}
+	
+	private void solve(String lpFilename, int investissement, int scenario) throws IloException, IOException{
+		createLpFile(lpFilename, investissement, scenario);		
 		cplex.importModel(lpFilename);
 		
 		if(cplex.solve()){
-            cplex.output().println("Solution status = " + cplex.getStatus());
-            cplex.output().println("Solution value  = " + cplex.getObjValue());
-
+            matriceResultats[investissement][scenario] = String.valueOf(cplex.getObjValue());
+		}
+		else{
+			matriceResultats[investissement][scenario] = "Impossible";
 		}
 		
+	}
+	
+	public String getSolution(int investissement, int scenario){
+		return matriceResultats[investissement][scenario];
 	}
 	
 	public void loadData(String filename) throws IOException{
@@ -128,9 +147,12 @@ public class Solver {
 			data.addPeriode(periode);			
 		}
 		br.close();
+		
+		matriceLpFilename = new String [nbInvestissements][nbScenarios];
+		matriceResultats = new String [nbInvestissements][nbScenarios];
 	}
 	
-	public void createLpFile(int investissement, int scenario) throws IOException{
+	private void createLpFile(String lpFilename, int investissement, int scenario) throws IOException{
 		OutputStream ops = new FileOutputStream(lpFilename); 
 		OutputStreamWriter opsw = new OutputStreamWriter(ops);
 		BufferedWriter bw = new BufferedWriter(opsw);
@@ -173,25 +195,33 @@ public class Solver {
 		StringBuilder stockage = new StringBuilder();
 		StringBuilder ammortissement = new StringBuilder();
 		
-		//COUT DES VENTES
-		for(int i = 0; i < nbPeriodes; i++){
+		for(int i = 0; i <= nbPeriodes; i++){
 			for(int j = 0; j < nbProduits; j++){
-				vente += data.getPrix(j) * data.getPeriode(i).getDemande(j, scenario);
+				if(i == nbPeriodes){
+					//COUT DE STOCKAGE
+					stockage.append("-")
+							.append(data.getStockage())
+							.append(" Y_").append(j).append("_").append(i).append(" ");
+				}
+				else{
+					//COUT DES VENTES (prix de vente * la demande)
+					vente += data.getPrix(j) * data.getPeriode(i).getDemande(j, scenario);
 
-				//COUT DE PRODUCTION
-				production.append("-")
-						  .append(data.getInvestissement(investissement).getCoutProduction())
-						  .append(" X_").append(j).append("_").append(i).append(" ");
+					//COUT DE PRODUCTION
+					production.append("-")
+							  .append(data.getInvestissement(investissement).getCoutProduction())
+							  .append(" X_").append(j).append("_").append(i).append(" ");
 
-				//COUT DE STOCKAGE
-				stockage.append("-")
-						.append(data.getStockage())
-						.append(" Y_").append(j).append("_").append(i).append(" ");
-				
-				//COUT AMMORTISSEMENT
-				ammortissement.append("-")
-				  .append(data.getAmortissement())
-				  .append(" X_").append(j).append("_").append(i).append(" ");
+					//COUT DE STOCKAGE
+					stockage.append("-")
+							.append(data.getStockage())
+							.append(" Y_").append(j).append("_").append(i).append(" ");
+					
+					//COUT AMMORTISSEMENT
+					ammortissement.append("+")
+					  .append(data.getAmortissement())
+					  .append(" X_").append(j).append("_").append(i).append(" ");					
+				}
 			}
 		}
 		
@@ -200,7 +230,7 @@ public class Solver {
 		ammort = data.getAmortissement() * nbPeriodes * data.getInvestissement(investissement).getCapacite();
 		
 		//CREATION DE LA FONCTION DE MAXIMISATION
-		maxFunction.append(production).append(stockage).append(ammortissement)
+		maxFunction.append(production).append(stockage).append(ammortissement).append(" +")
 				   .append(vente - achat - ammort).append(" cst");
 		
 		
