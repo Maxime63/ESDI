@@ -18,10 +18,15 @@ import com.tp.edsi.metier.Investissement;
 import com.tp.edsi.metier.Periode;
 
 public class Solver {
+	public static final double UNSOLVABLE = 9999.99;
+	
 	private IloCplex cplex;
 	private Data data;
+	
 	private String [][] matriceLpFilename;
-	private String [][] matriceResultats;
+	private double [][] matriceResultats;
+	private double [] resultatsMoyenne;
+	private double [][] resultatsMinMaxRegret;
 	
 	public Solver() throws IloException{
 		cplex = new IloCplex();
@@ -29,6 +34,55 @@ public class Solver {
 	
 	public Data getData(){
 		return data;
+	}
+	
+	public void minMaxAbsolu(){
+		
+	}
+	
+	public void minMaxRegret(){
+		int nbScenarios = data.getNbScenarios();
+		int nbInvestissements = data.getNbInvestissements();
+		double solutionMinimale = 0.0;
+		
+		
+		for(int i = 0; i < nbInvestissements; i++){
+			//Recherche de la solution minimale
+			solutionMinimale = matriceResultats[i][0];
+			for(int j = 0; j < nbScenarios; j++){
+				if(matriceResultats[i][j] < solutionMinimale){
+					solutionMinimale = matriceResultats[i][j];
+				}
+			}
+			
+			//Création du tableau min max regret
+			for(int j = 0; j < nbScenarios; j++){
+				resultatsMinMaxRegret[i][j] = matriceResultats[i][j] - solutionMinimale;
+			}
+			
+		}
+	}
+	
+	public double getMinMaxRegret(int investissement, int scenario){
+		return resultatsMinMaxRegret[investissement][scenario];
+	}
+
+	public void moyenne(){
+		int nbScenarios = data.getNbScenarios();
+		int nbInvestissements = data.getNbInvestissements();
+		double somme = 0.0;
+		
+		for(int i = 0; i < nbInvestissements; i++){
+			for(int j = 0; j < nbScenarios; j++){
+				somme += matriceResultats[i][j];
+			}
+			resultatsMoyenne[i] = somme / nbScenarios;
+			somme = 0.0;
+		}
+	}
+	
+	public double getMoyenne(int investissement){
+		return resultatsMoyenne[investissement];
 	}
 	
 	public void solveProblem() throws IloException, IOException{
@@ -49,15 +103,15 @@ public class Solver {
 		cplex.importModel(lpFilename);
 		
 		if(cplex.solve()){
-            matriceResultats[investissement][scenario] = String.valueOf(cplex.getObjValue());
+            matriceResultats[investissement][scenario] = cplex.getObjValue();
 		}
 		else{
-			matriceResultats[investissement][scenario] = "Impossible";
+			matriceResultats[investissement][scenario] = UNSOLVABLE;
 		}
 		
 	}
 	
-	public String getSolution(int investissement, int scenario){
+	public double getSolution(int investissement, int scenario){
 		return matriceResultats[investissement][scenario];
 	}
 	
@@ -148,8 +202,11 @@ public class Solver {
 		}
 		br.close();
 		
+		//Initialisation des tableaux de résultats
 		matriceLpFilename = new String [nbInvestissements][nbScenarios];
-		matriceResultats = new String [nbInvestissements][nbScenarios];
+		matriceResultats = new double [nbInvestissements][nbScenarios];
+		resultatsMoyenne = new double[nbInvestissements];
+		resultatsMinMaxRegret = new double [nbInvestissements][nbScenarios];
 	}
 	
 	private void createLpFile(String lpFilename, int investissement, int scenario) throws IOException{
