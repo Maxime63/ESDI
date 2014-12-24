@@ -20,7 +20,8 @@ public class Solver {
 	private String [][] matriceLpFilename;
 	private double [][] matriceResultats;
 	private double [] resultatsMoyenne;
-	private double [][] resultatsMinMaxRegret;
+	private double [] resultatsMaxMinAbsolu;
+	private double [][] resultatsMaxMinRegret;
 	
 	public Solver(Data data) throws IloException{
 		cplex = new IloCplex();
@@ -30,8 +31,9 @@ public class Solver {
 		//Initialisation des tableaux de résultats
 		matriceLpFilename = new String [data.getNbInvestissements()][data.getNbScenarios()];
 		matriceResultats = new double [data.getNbInvestissements()][data.getNbScenarios()];
-		resultatsMoyenne = new double[data.getNbInvestissements()];
-		resultatsMinMaxRegret = new double [data.getNbInvestissements()][data.getNbScenarios()];
+		resultatsMoyenne = new double [data.getNbInvestissements()];
+		resultatsMaxMinAbsolu = new double [data.getNbScenarios()];
+		resultatsMaxMinRegret = new double [data.getNbInvestissements()][data.getNbScenarios()];
 
 	}
 	
@@ -39,35 +41,50 @@ public class Solver {
 		return data;
 	}
 	
-	public void minMaxAbsolu(){
-		
-	}
-	
-	public void minMaxRegret(){
+	public void MaxMinAbsolu(){
 		int nbScenarios = data.getNbScenarios();
 		int nbInvestissements = data.getNbInvestissements();
-		double solutionMinimale = 0.0;
+		double solutionMaximale = 0.0;
+		
+		for(int i = 0; i < nbScenarios; i++){
+			for(int j = 0; j < nbInvestissements; j++){
+				if(matriceResultats[j][i] > solutionMaximale){
+					solutionMaximale = matriceResultats[j][i];
+				}
+			}
+			resultatsMaxMinAbsolu[i] = solutionMaximale;
+			solutionMaximale = 0.0;
+		}
+	}
+	
+	public double getMaxMinAbsolu(int scenario){
+		return resultatsMaxMinAbsolu[scenario];
+	}
+	
+	public void MaxMinRegret(){
+		int nbScenarios = data.getNbScenarios();
+		int nbInvestissements = data.getNbInvestissements();
+		double solutionMaximale = 0.0;
 		
 		
 		for(int i = 0; i < nbInvestissements; i++){
 			//Recherche de la solution minimale
-			solutionMinimale = matriceResultats[i][0];
 			for(int j = 0; j < nbScenarios; j++){
-				if(matriceResultats[i][j] < solutionMinimale){
-					solutionMinimale = matriceResultats[i][j];
+				if(matriceResultats[i][j] > solutionMaximale){
+					solutionMaximale = matriceResultats[i][j];
 				}
 			}
 			
-			//Création du tableau min max regret
+			//Création du tableau max min regret
 			for(int j = 0; j < nbScenarios; j++){
-				resultatsMinMaxRegret[i][j] = matriceResultats[i][j] - solutionMinimale;
+				resultatsMaxMinRegret[i][j] = matriceResultats[i][j] - solutionMaximale;
 			}
 			
 		}
 	}
 	
-	public double getMinMaxRegret(int investissement, int scenario){
-		return resultatsMinMaxRegret[investissement][scenario];
+	public double getMaxMinRegret(int investissement, int scenario){
+		return resultatsMaxMinRegret[investissement][scenario];
 	}
 
 	public void moyenne(){
