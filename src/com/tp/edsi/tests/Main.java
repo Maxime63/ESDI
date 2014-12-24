@@ -10,11 +10,10 @@ import com.tp.edsi.solver.Solver;
 
 public class Main {
 	public static void main(String[] args){
-			Solver solver;
 			try {
-				solver = new Solver();
-				solver.loadData("data.txt");
-				
+				Data data = new Data();
+				data.loadData("data.txt");
+				Solver solver = new Solver(data);
 //				Data data = solver.getData();
 //				int nbPeriodes = data.getNbPeriodes();
 //				int nbScenarios = data.getNbScenarios();

@@ -1,12 +1,8 @@
 package com.tp.edsi.solver;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
@@ -14,8 +10,6 @@ import ilog.concert.IloException;
 import ilog.cplex.IloCplex;
 
 import com.tp.edsi.metier.Data;
-import com.tp.edsi.metier.Investissement;
-import com.tp.edsi.metier.Periode;
 
 public class Solver {
 	public static final double UNSOLVABLE = 9999.99;
@@ -28,8 +22,17 @@ public class Solver {
 	private double [] resultatsMoyenne;
 	private double [][] resultatsMinMaxRegret;
 	
-	public Solver() throws IloException{
+	public Solver(Data data) throws IloException{
 		cplex = new IloCplex();
+		
+		this.data = data;
+		
+		//Initialisation des tableaux de résultats
+		matriceLpFilename = new String [data.getNbInvestissements()][data.getNbScenarios()];
+		matriceResultats = new double [data.getNbInvestissements()][data.getNbScenarios()];
+		resultatsMoyenne = new double[data.getNbInvestissements()];
+		resultatsMinMaxRegret = new double [data.getNbInvestissements()][data.getNbScenarios()];
+
 	}
 	
 	public Data getData(){
@@ -115,99 +118,7 @@ public class Solver {
 		return matriceResultats[investissement][scenario];
 	}
 	
-	public void loadData(String filename) throws IOException{
-		InputStream ips=new FileInputStream(filename); 
-		InputStreamReader ipsr=new InputStreamReader(ips);
-		BufferedReader br=new BufferedReader(ipsr);
-		
-		String ligne;
-		String readDatas[];
-		
-		//NB PERIODES
-		ligne=br.readLine();
-		readDatas=ligne.split(" ");
-		int nbPeriodes = Integer.parseInt(readDatas[0]);
-		
-		//NB PRODUITS
-		ligne=br.readLine();
-		readDatas=ligne.split(" ");
-		int nbProduits = Integer.parseInt(readDatas[0]);
-		
-		//NB SCENARIOS
-		ligne=br.readLine();
-		readDatas=ligne.split(" ");
-		int nbScenarios = Integer.parseInt(readDatas[0]);
-		
-		//NB INVESTISSEMENTS
-		ligne=br.readLine();
-		readDatas=ligne.split(" ");
-		int nbInvestissements = Integer.parseInt(readDatas[0]);
-		
-		data = new Data(nbPeriodes, nbProduits, nbScenarios, nbInvestissements);
-		
-		ligne=br.readLine();
-		
-		//COUT DE STOCKAGE
-		ligne=br.readLine();
-		readDatas=ligne.split(" ");
-		data.setStockage(Integer.parseInt(readDatas[1]));
-		
-		//PRIX DE VENTE DES PRODUITS
-		ligne=br.readLine();
-		readDatas=ligne.split(" ");
-		for(int i = 0; i< nbProduits; i++){
-			data.setPrix(i, Integer.parseInt(readDatas[i + 1]));
-		}
-		
-		//COUT DE L'AMMORTISSEMENT
-		ligne=br.readLine();
-		readDatas=ligne.split(" ");
-		data.setAmortissement(Integer.parseInt(readDatas[1]));
-		
-		ligne=br.readLine();
-		ligne=br.readLine();
 
-		//AJOUT DES INVESTISSEMENTS
-		for(int i = 0; i < nbInvestissements; i++)
-		{
-			ligne=br.readLine();
-			readDatas=ligne.split(" ");
-			
-			Investissement investissement = new Investissement(	Integer.parseInt(readDatas[1]), 
-																Integer.parseInt(readDatas[2]), 
-																Integer.parseInt(readDatas[3]), 
-																Integer.parseInt(readDatas[4]));
-			data.addInvestissement(investissement);
-			
-		}
-		
-		ligne=br.readLine();
-		ligne=br.readLine();
-		
-		//AJOUT DES PERIODES
-		for(int i = 0; i < nbPeriodes; i++)
-		{
-			ligne=br.readLine();
-			readDatas=ligne.split("	");
-			
-			Periode periode = new Periode(nbProduits, nbScenarios);
-			
-			for(int j = 0; j < nbProduits; j++){
-				for(int k = 0; k < nbScenarios; k++){
-					String cout = readDatas[(j*nbInvestissements) + k + 2].split(" ")[0];
-					periode.setDemande(j, k, Integer.parseInt(cout));
-				}
-			}
-			data.addPeriode(periode);			
-		}
-		br.close();
-		
-		//Initialisation des tableaux de résultats
-		matriceLpFilename = new String [nbInvestissements][nbScenarios];
-		matriceResultats = new double [nbInvestissements][nbScenarios];
-		resultatsMoyenne = new double[nbInvestissements];
-		resultatsMinMaxRegret = new double [nbInvestissements][nbScenarios];
-	}
 	
 	private void createLpFile(String lpFilename, int investissement, int scenario) throws IOException{
 		OutputStream ops = new FileOutputStream(lpFilename); 
