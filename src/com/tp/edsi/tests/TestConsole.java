@@ -8,7 +8,7 @@ import com.tp.edsi.metier.Data;
 import com.tp.edsi.metier.Periode;
 import com.tp.edsi.solver.Solver;
 
-public class Main {
+public class TestConsole {
 	public static void main(String[] args){
 			try {
 				Data data = new Data();
