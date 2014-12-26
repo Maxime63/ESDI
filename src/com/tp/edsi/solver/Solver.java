@@ -12,7 +12,7 @@ import ilog.cplex.IloCplex;
 import com.tp.edsi.metier.Data;
 
 public class Solver {
-	public static final double UNSOLVABLE = 9999.99;
+	public static final double UNSOLVABLE = -9999.99;
 	
 	private IloCplex cplex;
 	private Data data;

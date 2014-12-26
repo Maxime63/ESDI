@@ -1,18 +1,18 @@
 package com.tp.edsi.vue;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,13 +23,18 @@ import javax.swing.border.Border;
 
 import com.tp.edsi.constantes.ConstantesVues;
 import com.tp.edsi.controleurs.Controleur;
+import com.tp.edsi.model.Modele;
+import com.tp.edsi.solver.Solver;
 
-public class Fenetre extends JFrame implements ConstantesVues{
+public class Fenetre extends JFrame implements ConstantesVues, Observer{
 
 	/***/
 	private static final long serialVersionUID = 1L;
 
 	private Controleur ctrl;
+	private Modele mdl;
+	
+	private JFileChooser fileChooser;
 	
 	private JTextField fileChoose;
 	private JTextPane console;
@@ -37,9 +42,14 @@ public class Fenetre extends JFrame implements ConstantesVues{
 	private JRadioButton buttonMaxMinAbsolu;
 	private JRadioButton buttonMaxMinRegret;
 	private JRadioButton buttonMoyenne;
+	private Bouton solve;
 	
 	public Fenetre() {
-		ctrl = new Controleur();
+		mdl = new Modele();
+		mdl.addObserver(this);
+		ctrl = new Controleur(mdl);
+		
+		fileChooser = new JFileChooser("./");
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("TP - Optimisation et évaluation des systèmes dans l'incertain");
@@ -72,10 +82,7 @@ public class Fenetre extends JFrame implements ConstantesVues{
 		
 		//BOUTON POUR PARCOURIR
 		gbc.gridx = 2;
-		JButton parcourir = new JButton(PARCOURIR);
-		parcourir.addActionListener(ctrl);
-		parcourir.setActionCommand(PARCOURIR);
-		panneau.add(parcourir, gbc);
+		panneau.add(new Bouton(PARCOURIR, ctrl, PARCOURIR, true), gbc);
 		
 		//AFFICHAGE DE LA CONSOLE
 		gbc.gridx = 3;
@@ -94,9 +101,7 @@ public class Fenetre extends JFrame implements ConstantesVues{
 		gbc.gridheight = 1;
 		gbc.gridwidth = 1;
 		gbc.insets = new Insets(10, 0, 10, 0);
-		JButton solve = new JButton(SOLVE);
-		solve.addActionListener(ctrl);
-		solve.setActionCommand(SOLVE);
+		solve = new Bouton(SOLVE, ctrl, SOLVE, false);
 		panneau.add(solve, gbc);
 		
 		//AJOUT DES BOUTTONS POUR LES ALGOS
@@ -136,13 +141,66 @@ public class Fenetre extends JFrame implements ConstantesVues{
 		gbc.gridheight = 1;
 		gbc.gridwidth = 1;
 		gbc.insets = new Insets(0, 0, 80, 0);
-		JButton appliquerAlgo = new JButton(APPLIQUER_ALGO);
-		panneau.add(appliquerAlgo, gbc);
+		panneau.add(new Bouton(APPLIQUER_ALGO, ctrl, APPLIQUER_ALGO, false), gbc);
 		
 		
 		return panneau;
 	}
 	
-//	JFileChooser fileChooser = new JFileChooser("./");
-//	panneau.add(fileChooser);
+	private void openFileChooser() {
+		fileChooser.showOpenDialog(this);
+		String dataFilename = fileChooser.getSelectedFile().getAbsoluteFile().toString();
+		fileChoose.setText(dataFilename);
+		mdl.setDataFilename(dataFilename);
+		solve.setEnabled(true);
+	}
+	
+	private void afficherResultatLp(){
+		int nbInvestissements = mdl.getSolver().getData().getNbInvestissements();
+		int nbScenarios = mdl.getSolver().getData().getNbScenarios();
+		
+		StringBuilder resultatLp = new StringBuilder();
+		resultatLp.append("--------------------------RESOLUTION---------------------------\n\t");
+		
+		for(int i = 0; i < nbScenarios; i++){
+			resultatLp.append("Scenario ").append(i).append("\t");
+		}
+		resultatLp.append("\n");
+		for(int i = 0; i < nbInvestissements; i++){
+			resultatLp.append("Inv ").append(i).append("\t");
+			for(int j = 0; j < nbScenarios; j++){
+				if(mdl.getSolver().getSolution(i, j) == Solver.UNSOLVABLE){
+					resultatLp.append("Imp.").append("\t");					
+				}
+				else{
+					resultatLp.append(mdl.getSolver().getSolution(i, j)).append("\t");
+				}
+			}
+			resultatLp.append("\n");
+		}
+		console.setText(resultatLp.toString());
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if(o instanceof Modele){
+			if(arg instanceof String){
+				String msg = (String) arg;
+				String[] tab = msg.split(SPLIT);
+				
+				switch (tab[0]){
+					case OPEN_FILE_CHOOSER:
+						openFileChooser();
+						break;
+					case PROBLEM_SOLVE:
+						afficherResultatLp();						
+						break;
+					case MSG_ERREUR:
+						console.setText("/!\\ " + tab[1] + "/!\\");
+						console.setCaretColor(Color.RED);
+						break;
+				}
+			}
+		}
+	}
 }
