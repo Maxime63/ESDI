@@ -16,6 +16,7 @@ public class Solver {
 	
 	private IloCplex cplex;
 	private Data data;
+	private int stockInitial;
 	
 	private String [][] matriceLpFilename;
 	private double [][] matriceResultats;
@@ -37,11 +38,19 @@ public class Solver {
 
 	}
 	
+	public void setStockInitial(int stockInitial){
+		this.stockInitial = stockInitial;
+	}
+	
+	public int getStockInitial(){
+		return stockInitial;
+	}
+	
 	public Data getData(){
 		return data;
 	}
 	
-	public void MaxMinAbsolu(){
+	public void maxMinAbsolu(){
 		int nbScenarios = data.getNbScenarios();
 		int nbInvestissements = data.getNbInvestissements();
 		double solutionMaximale = 0.0;
@@ -61,7 +70,7 @@ public class Solver {
 		return resultatsMaxMinAbsolu[scenario];
 	}
 	
-	public void MaxMinRegret(){
+	public void maxMinRegret(){
 		int nbScenarios = data.getNbScenarios();
 		int nbInvestissements = data.getNbInvestissements();
 		double solutionMaximale = 0.0;
@@ -157,9 +166,11 @@ public class Solver {
 		bw.write("Bounds\n");
 		bw.write("cst = 1");
 		bw.write("\n");
-		bw.write("Y_0_0 = 0");
+		
+		//STOCK INITIAUX
+		bw.write("Y_0_0 = " + stockInitial);
 		bw.write("\n");
-		bw.write("Y_1_0 = 0");
+		bw.write("Y_1_0 = " + stockInitial);
 		
 		bw.write("\n");
 		bw.write("End");
