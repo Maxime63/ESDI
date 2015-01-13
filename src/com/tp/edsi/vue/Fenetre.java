@@ -17,6 +17,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.Border;
@@ -38,7 +40,8 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 	
 	private JTextField fileChoose;
 	private JTextField stockInital;
-	private JTextPane console;
+	private JScrollPane consolePan;
+	private JTextArea console;
 	private ButtonGroup buttonAlgos;
 	private RadioBouton buttonMaxMinAbsolu;
 	private RadioBouton buttonMaxMinRegret;
@@ -55,7 +58,7 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setTitle("TP - Optimisation et évaluation des systèmes dans l'incertain");
-		setSize(800, 400);
+		setSize(850, 450);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new FlowLayout());
 		getContentPane().setBackground(Color.WHITE);
@@ -89,13 +92,14 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 		//AFFICHAGE DE LA CONSOLE
 		gbc.gridx = 3;
 		gbc.gridwidth = 1;
-		gbc.gridheight = 8;
+		gbc.gridheight = 9;
 		gbc.insets = new Insets(0, 5, 0, 0);
-		console = new JTextPane();
+		console = new JTextArea();
 		console.setBackground(Color.WHITE);
 		console.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		console.setPreferredSize(new Dimension(400, 350));
-		panneau.add(console, gbc);
+		consolePan = new JScrollPane(console);
+		consolePan.setPreferredSize(new Dimension(400, 350));
+		panneau.add(consolePan, gbc);
 
 		//LABEL STOCK INITIAL
 		gbc.gridx = 0;
@@ -273,15 +277,40 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 	}
 
 	private void afficherResultatMaxMinRegret() {
-		// TODO Auto-generated method stub
+		int nbInvestissements = mdl.getSolver().getData().getNbInvestissements();
+		double maxRegret;
+		int bestInvestissement = 0;
 		
+		StringBuilder resultatMaxMinRegret = new StringBuilder();
+		resultatMaxMinRegret.append("--------------------------ALGO MAX MIN REGRET---------------------------\n\t");
+		
+		for(int i = 0; i < nbInvestissements; i++){
+			resultatMaxMinRegret.append("Inv ").append(i + 1).append("\t");
+		}
+		resultatMaxMinRegret.append("\n\t");
+		maxRegret = mdl.getSolver().getMaxMinRegret(0);
+		for(int i = 0; i < nbInvestissements; i++){
+			if(mdl.getSolver().getMaxMinRegret(i) == Solver.UNSOLVABLE){				
+				resultatMaxMinRegret.append("Imp.").append("\t");
+			}
+			else{
+				if(mdl.getSolver().getMaxMinRegret(i) > maxRegret){
+					maxRegret = mdl.getSolver().getMaxMinRegret(i);
+					bestInvestissement = i;
+				}
+				resultatMaxMinRegret.append(mdl.getSolver().getMaxMinRegret(i)).append("\t");
+			}
+		}
+		resultatMaxMinRegret.append("\n\n");
+		resultatMaxMinRegret.append("Meilleur investissement : ").append(++bestInvestissement);
+
+		console.setText(console.getText() + "\n\n\n" + resultatMaxMinRegret.toString());
 	}
 
 	private void afficherResultatMaxMinAbsolu() {
 		int nbScenarios = mdl.getSolver().getData().getNbScenarios();
 		int nbInvestissements = mdl.getSolver().getData().getNbInvestissements();
 		double valeur = 0.0;
-		double maxAbsolu = 0.0;
 		int[] inv = new int[nbInvestissements];
 		int nb = 0;
 		int bestInvestissement = 0;

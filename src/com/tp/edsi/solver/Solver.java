@@ -12,7 +12,7 @@ import ilog.cplex.IloCplex;
 import com.tp.edsi.metier.Data;
 
 public class Solver {
-	public static final double UNSOLVABLE = -9999.99;
+	public static final double UNSOLVABLE = -999999999999.99;
 	
 	private IloCplex cplex;
 	private Data data;
@@ -22,7 +22,7 @@ public class Solver {
 	private double [][] matriceResultats;
 	private double [] resultatsMoyenne;
 	private double [] resultatsMaxMinAbsolu;
-	private double [][] resultatsMaxMinRegret;
+	private double [] resultatsMaxMinRegret;
 	
 	public Solver(Data data) throws IloException{
 		cplex = new IloCplex();
@@ -34,7 +34,7 @@ public class Solver {
 		matriceResultats = new double [data.getNbInvestissements()][data.getNbScenarios()];
 		resultatsMoyenne = new double [data.getNbInvestissements()];
 		resultatsMaxMinAbsolu = new double [data.getNbScenarios()];
-		resultatsMaxMinRegret = new double [data.getNbInvestissements()][data.getNbScenarios()];
+		resultatsMaxMinRegret = new double [data.getNbInvestissements()];
 
 	}
 	
@@ -74,10 +74,11 @@ public class Solver {
 		int nbScenarios = data.getNbScenarios();
 		int nbInvestissements = data.getNbInvestissements();
 		double solutionMaximale = 0.0;
-		
+		double[][] resultatRegret = new double[data.getNbInvestissements()][data.getNbScenarios()];
+		double minRegret;
 		
 		for(int i = 0; i < nbInvestissements; i++){
-			//Recherche de la solution minimale
+			//Recherche de la solution maximale
 			for(int j = 0; j < nbScenarios; j++){
 				if(matriceResultats[i][j] > solutionMaximale){
 					solutionMaximale = matriceResultats[i][j];
@@ -86,14 +87,24 @@ public class Solver {
 			
 			//Création du tableau max min regret
 			for(int j = 0; j < nbScenarios; j++){
-				resultatsMaxMinRegret[i][j] = matriceResultats[i][j] - solutionMaximale;
+				resultatRegret[i][j] = matriceResultats[i][j] - solutionMaximale;
+			}
+		}
+		
+		for(int i = 0; i < nbInvestissements; i++){
+			minRegret = resultatRegret[i][0];
+			for(int j = 0; j < nbScenarios; j++){
+				if(resultatRegret[i][j] < minRegret){
+					minRegret = matriceResultats[i][j];
+				}
 			}
 			
+			resultatsMaxMinRegret[i] = minRegret;
 		}
 	}
 	
-	public double getMaxMinRegret(int investissement, int scenario){
-		return resultatsMaxMinRegret[investissement][scenario];
+	public double getMaxMinRegret(int investissement){
+		return resultatsMaxMinRegret[investissement];
 	}
 
 	public void moyenne(){
