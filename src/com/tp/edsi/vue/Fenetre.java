@@ -12,6 +12,7 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,15 +40,18 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 	private JFileChooser fileChooser;
 	
 	private JTextField fileChoose;
-	private JTextField stockInital;
 	private JScrollPane consolePan;
 	private JTextArea console;
+	private Bouton solve;
+	private Bouton applicateAlgo;
+	
 	private ButtonGroup buttonAlgos;
 	private RadioBouton buttonMaxMinAbsolu;
 	private RadioBouton buttonMaxMinRegret;
 	private RadioBouton buttonMoyenne;
-	private Bouton solve;
-	private Bouton applicateAlgo;
+	
+	private CheckBox resolutionStochastique;
+	private CheckBox stockInitial;
 	
 	public Fenetre() {
 		mdl = new Modele();
@@ -104,17 +108,21 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 		//LABEL STOCK INITIAL
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		gbc.gridwidth = 1;
-		gbc.gridheight = 1;
-		panneau.add(new JLabel("Stock initial : "), gbc);
+		gbc.gridwidth = 3;
+		gbc.gridheight = 2;
 		
-		//ZONE DE SAISIE STOCK INITIAL
-		gbc.gridx = 1;
-		stockInital = new JTextField(19);
-		stockInital.setName(STOCK_INITIAL);
-		stockInital.addFocusListener(ctrl);
-		panneau.add(stockInital, gbc);
+		JPanel panneauOptions = new JPanel(new GridLayout(2, 1));
+		Border cadreOptions = BorderFactory.createTitledBorder("Options");
+		panneauOptions.setBorder(cadreOptions);
+		panneauOptions.setBackground(Color.WHITE);
 
+		resolutionStochastique = new CheckBox(RESOLUTION_STOCHASTIQUE, Color.WHITE, ctrl, RESOLUTION_STOCHASTIQUE);
+		stockInitial = new CheckBox(STOCK_INITIAL, Color.WHITE, ctrl, STOCK_INITIAL);
+
+		panneauOptions.add(resolutionStochastique);
+		panneauOptions.add(stockInitial);
+		
+		panneau.add(panneauOptions, gbc);
 		//BOUTON POUR RESOUDRE LE PL
 		gbc.gridx = 1;
 		gbc.gridy = 3;
@@ -202,6 +210,22 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 							case ALGO_MOYENNE:
 								afficherResultatMoyenne();
 								break;
+						}
+						break;
+					case STOCHASTIC_SOLVED_CHANGED:
+						if(mdl.isStochasticSolved()){
+							buttonMaxMinAbsolu.setEnabled(false);
+							buttonMaxMinRegret.setEnabled(false);
+							buttonMoyenne.setEnabled(false);
+							applicateAlgo.setEnabled(false);
+						}
+						else{
+							buttonMaxMinAbsolu.setEnabled(true);
+							buttonMaxMinRegret.setEnabled(true);
+							buttonMoyenne.setEnabled(true);
+							if(mdl.isSolved() && mdl.isAlgoSelected()){
+								applicateAlgo.setEnabled(true);
+							}
 						}
 						break;
 				}

@@ -8,24 +8,32 @@ import ilog.concert.IloException;
 import com.tp.edsi.constantes.ConstantesVues;
 import com.tp.edsi.metier.Data;
 import com.tp.edsi.solver.Solver;
+import com.tp.edsi.solver.SolverStochastique;
 
 public class Modele extends Observable implements ConstantesVues{
 	private Solver solver;
+	private SolverStochastique solverStochastique;
 	private String dataFilename;
 	private Data data;
 	private boolean isSolved;
 	private boolean isAlgoSelected;
-	private int stockInitial;
+	private boolean isStochasticSolved;
+	private boolean isStockIntialized;
 	private String algorithme;
 	
 	public Modele(){
-		stockInitial = 0;
 		isSolved = false;
 		isAlgoSelected = false;
+		isStochasticSolved = false;
+		isStockIntialized = false;
 	}
 	
 	public Solver getSolver(){
 		return solver;
+	}
+	
+	public SolverStochastique getSolverStochastique(){
+		return solverStochastique;
 	}
 	
 	public void setDataFilename(String dataFilename){
@@ -40,9 +48,15 @@ public class Modele extends Observable implements ConstantesVues{
 		try {
 			data = new Data();
 			data.loadData(dataFilename);
-			solver = new Solver(data);
-			solver.setStockInitial(stockInitial);
-			solver.solveProblem();
+			
+			if(isStochasticSolved){
+				solverStochastique = new SolverStochastique(data);
+				solverStochastique.solveProblem();
+			}
+			else{
+				solver = new Solver(data);
+				solver.solveProblem();				
+			}
 			isSolved = true;
 			sendMessage(PROBLEM_SOLVE);
 		} catch (IloException e) {
@@ -57,9 +71,6 @@ public class Modele extends Observable implements ConstantesVues{
 		notifyObservers(message);		
 	}
 
-	public void setStockInitial(int stockInitial) {
-		this.stockInitial = stockInitial;
-	}
 
 	public void setAlgorithme(String algorithme) {
 		this.algorithme = algorithme;
@@ -73,6 +84,23 @@ public class Modele extends Observable implements ConstantesVues{
 
 	public boolean isAlgoSelected(){
 		return isAlgoSelected;
+	}
+	
+	public void setStockInitialized(boolean isStockInitialized){
+		this.isStockIntialized = isStockInitialized;
+	}
+	
+	public void setStochasticSolved(boolean isStochasticSolved){
+		this.isStochasticSolved = isStochasticSolved;
+		sendMessage(STOCHASTIC_SOLVED_CHANGED);
+	}
+	
+	public boolean isStockInitialized(){
+		return isStockIntialized;
+	}
+	
+	public boolean isStochasticSolved(){
+		return isStochasticSolved;
 	}
 
 	public void applicateAglorithm() {

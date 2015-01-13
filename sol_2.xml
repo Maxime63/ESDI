@@ -1,10 +1,10 @@
 <?xml version = "1.0" encoding="UTF-8" standalone="yes"?>
 <CPLEXSolution version="1.2">
  <header
-   problemName="D:\ISIMA\ZZ3\ESDI\solve_0.lp"
+   problemName="D:\ISIMA\ZZ3\ESDI\solve_2.lp"
    solutionName="incumbent"
    solutionIndex="-1"
-   objectiveValue="41830000"
+   objectiveValue="49330000"
    solutionTypeValue="3"
    solutionTypeString="primal"
    solutionStatusValue="101"
@@ -13,15 +13,15 @@
    primalFeasible="1"
    dualFeasible="1"
    MIPNodes="0"
-   MIPIterations="122"
+   MIPIterations="169"
    writeLevel="1"/>
  <quality
    epInt="1e-05"
    epRHS="1e-06"
    maxIntInfeas="0"
    maxPrimalInfeas="0"
-   maxX="60000"
-   maxSlack="85000"/>
+   maxX="80000"
+   maxSlack="80000"/>
  <linearConstraints>
   <constraint name="stock_0_0" index="0" slack="0"/>
   <constraint name="stock_1_0" index="1" slack="0"/>
@@ -47,26 +47,26 @@
   <constraint name="stock_1_10" index="21" slack="0"/>
   <constraint name="stock_0_11" index="22" slack="0"/>
   <constraint name="stock_1_11" index="23" slack="0"/>
-  <constraint name="Capa_0" index="24" slack="20000"/>
+  <constraint name="Capa_0" index="24" slack="10000"/>
   <constraint name="Capa_1" index="25" slack="0"/>
   <constraint name="Capa_2" index="26" slack="0"/>
-  <constraint name="Capa_3" index="27" slack="30000"/>
-  <constraint name="Capa_4" index="28" slack="40000"/>
-  <constraint name="Capa_5" index="29" slack="20000"/>
-  <constraint name="Capa_6" index="30" slack="10000"/>
-  <constraint name="Capa_7" index="31" slack="10000"/>
-  <constraint name="Capa_8" index="32" slack="20000"/>
-  <constraint name="Capa_9" index="33" slack="25000"/>
-  <constraint name="Capa_10" index="34" slack="15000"/>
-  <constraint name="Capa_11" index="35" slack="10000"/>
+  <constraint name="Capa_3" index="27" slack="10000"/>
+  <constraint name="Capa_4" index="28" slack="15000"/>
+  <constraint name="Capa_5" index="29" slack="25000"/>
+  <constraint name="Capa_6" index="30" slack="5000"/>
+  <constraint name="Capa_7" index="31" slack="0"/>
+  <constraint name="Capa_8" index="32" slack="0"/>
+  <constraint name="Capa_9" index="33" slack="0"/>
+  <constraint name="Capa_10" index="34" slack="0"/>
+  <constraint name="Capa_11" index="35" slack="0"/>
   <constraint name="Somme_Z" index="36" slack="0"/>
-  <constraint name="W_0_0_0_a" index="37" slack="50000"/>
+  <constraint name="W_0_0_0_a" index="37" slack="60000"/>
   <constraint name="W_0_0_0_b" index="38" slack="0"/>
   <constraint name="W_0_0_0_c" index="39" slack="0"/>
   <constraint name="W_0_0_1_a" index="40" slack="0"/>
-  <constraint name="W_0_0_1_b" index="41" slack="70000"/>
-  <constraint name="W_0_0_1_c" index="42" slack="-50000"/>
-  <constraint name="W_0_0_2_a" index="43" slack="50000"/>
+  <constraint name="W_0_0_1_b" index="41" slack="60000"/>
+  <constraint name="W_0_0_1_c" index="42" slack="-60000"/>
+  <constraint name="W_0_0_2_a" index="43" slack="60000"/>
   <constraint name="W_0_0_2_b" index="44" slack="0"/>
   <constraint name="W_0_0_2_c" index="45" slack="0"/>
   <constraint name="W_1_0_0_a" index="46" slack="50000"/>
@@ -114,31 +114,31 @@
   <constraint name="W_1_2_2_a" index="88" slack="60000"/>
   <constraint name="W_1_2_2_b" index="89" slack="0"/>
   <constraint name="W_1_2_2_c" index="90" slack="0"/>
-  <constraint name="W_0_3_0_a" index="91" slack="40000"/>
+  <constraint name="W_0_3_0_a" index="91" slack="50000"/>
   <constraint name="W_0_3_0_b" index="92" slack="0"/>
   <constraint name="W_0_3_0_c" index="93" slack="0"/>
   <constraint name="W_0_3_1_a" index="94" slack="0"/>
-  <constraint name="W_0_3_1_b" index="95" slack="80000"/>
-  <constraint name="W_0_3_1_c" index="96" slack="-40000"/>
-  <constraint name="W_0_3_2_a" index="97" slack="40000"/>
+  <constraint name="W_0_3_1_b" index="95" slack="70000"/>
+  <constraint name="W_0_3_1_c" index="96" slack="-50000"/>
+  <constraint name="W_0_3_2_a" index="97" slack="50000"/>
   <constraint name="W_0_3_2_b" index="98" slack="0"/>
   <constraint name="W_0_3_2_c" index="99" slack="0"/>
-  <constraint name="W_1_3_0_a" index="100" slack="50000"/>
+  <constraint name="W_1_3_0_a" index="100" slack="60000"/>
   <constraint name="W_1_3_0_b" index="101" slack="0"/>
   <constraint name="W_1_3_0_c" index="102" slack="0"/>
   <constraint name="W_1_3_1_a" index="103" slack="0"/>
-  <constraint name="W_1_3_1_b" index="104" slack="70000"/>
-  <constraint name="W_1_3_1_c" index="105" slack="-50000"/>
-  <constraint name="W_1_3_2_a" index="106" slack="50000"/>
+  <constraint name="W_1_3_1_b" index="104" slack="60000"/>
+  <constraint name="W_1_3_1_c" index="105" slack="-60000"/>
+  <constraint name="W_1_3_2_a" index="106" slack="60000"/>
   <constraint name="W_1_3_2_b" index="107" slack="0"/>
   <constraint name="W_1_3_2_c" index="108" slack="0"/>
-  <constraint name="W_0_4_0_a" index="109" slack="40000"/>
+  <constraint name="W_0_4_0_a" index="109" slack="65000"/>
   <constraint name="W_0_4_0_b" index="110" slack="0"/>
   <constraint name="W_0_4_0_c" index="111" slack="0"/>
   <constraint name="W_0_4_1_a" index="112" slack="0"/>
-  <constraint name="W_0_4_1_b" index="113" slack="80000"/>
-  <constraint name="W_0_4_1_c" index="114" slack="-40000"/>
-  <constraint name="W_0_4_2_a" index="115" slack="40000"/>
+  <constraint name="W_0_4_1_b" index="113" slack="55000"/>
+  <constraint name="W_0_4_1_c" index="114" slack="-65000"/>
+  <constraint name="W_0_4_2_a" index="115" slack="65000"/>
   <constraint name="W_0_4_2_b" index="116" slack="0"/>
   <constraint name="W_0_4_2_c" index="117" slack="0"/>
   <constraint name="W_1_4_0_a" index="118" slack="40000"/>
@@ -150,13 +150,13 @@
   <constraint name="W_1_4_2_a" index="124" slack="40000"/>
   <constraint name="W_1_4_2_b" index="125" slack="0"/>
   <constraint name="W_1_4_2_c" index="126" slack="0"/>
-  <constraint name="W_0_5_0_a" index="127" slack="50000"/>
+  <constraint name="W_0_5_0_a" index="127" slack="45000"/>
   <constraint name="W_0_5_0_b" index="128" slack="0"/>
   <constraint name="W_0_5_0_c" index="129" slack="0"/>
   <constraint name="W_0_5_1_a" index="130" slack="0"/>
-  <constraint name="W_0_5_1_b" index="131" slack="70000"/>
-  <constraint name="W_0_5_1_c" index="132" slack="-50000"/>
-  <constraint name="W_0_5_2_a" index="133" slack="50000"/>
+  <constraint name="W_0_5_1_b" index="131" slack="75000"/>
+  <constraint name="W_0_5_1_c" index="132" slack="-45000"/>
+  <constraint name="W_0_5_2_a" index="133" slack="45000"/>
   <constraint name="W_0_5_2_b" index="134" slack="0"/>
   <constraint name="W_0_5_2_c" index="135" slack="0"/>
   <constraint name="W_1_5_0_a" index="136" slack="50000"/>
@@ -168,13 +168,13 @@
   <constraint name="W_1_5_2_a" index="142" slack="50000"/>
   <constraint name="W_1_5_2_b" index="143" slack="0"/>
   <constraint name="W_1_5_2_c" index="144" slack="0"/>
-  <constraint name="W_0_6_0_a" index="145" slack="60000"/>
+  <constraint name="W_0_6_0_a" index="145" slack="65000"/>
   <constraint name="W_0_6_0_b" index="146" slack="0"/>
   <constraint name="W_0_6_0_c" index="147" slack="0"/>
   <constraint name="W_0_6_1_a" index="148" slack="0"/>
-  <constraint name="W_0_6_1_b" index="149" slack="60000"/>
-  <constraint name="W_0_6_1_c" index="150" slack="-60000"/>
-  <constraint name="W_0_6_2_a" index="151" slack="60000"/>
+  <constraint name="W_0_6_1_b" index="149" slack="55000"/>
+  <constraint name="W_0_6_1_c" index="150" slack="-65000"/>
+  <constraint name="W_0_6_2_a" index="151" slack="65000"/>
   <constraint name="W_0_6_2_b" index="152" slack="0"/>
   <constraint name="W_0_6_2_c" index="153" slack="0"/>
   <constraint name="W_1_6_0_a" index="154" slack="50000"/>
@@ -186,13 +186,13 @@
   <constraint name="W_1_6_2_a" index="160" slack="50000"/>
   <constraint name="W_1_6_2_b" index="161" slack="0"/>
   <constraint name="W_1_6_2_c" index="162" slack="0"/>
-  <constraint name="W_0_7_0_a" index="163" slack="50000"/>
+  <constraint name="W_0_7_0_a" index="163" slack="60000"/>
   <constraint name="W_0_7_0_b" index="164" slack="0"/>
   <constraint name="W_0_7_0_c" index="165" slack="0"/>
   <constraint name="W_0_7_1_a" index="166" slack="0"/>
-  <constraint name="W_0_7_1_b" index="167" slack="70000"/>
-  <constraint name="W_0_7_1_c" index="168" slack="-50000"/>
-  <constraint name="W_0_7_2_a" index="169" slack="50000"/>
+  <constraint name="W_0_7_1_b" index="167" slack="60000"/>
+  <constraint name="W_0_7_1_c" index="168" slack="-60000"/>
+  <constraint name="W_0_7_2_a" index="169" slack="60000"/>
   <constraint name="W_0_7_2_b" index="170" slack="0"/>
   <constraint name="W_0_7_2_c" index="171" slack="0"/>
   <constraint name="W_1_7_0_a" index="172" slack="60000"/>
@@ -204,13 +204,13 @@
   <constraint name="W_1_7_2_a" index="178" slack="60000"/>
   <constraint name="W_1_7_2_b" index="179" slack="0"/>
   <constraint name="W_1_7_2_c" index="180" slack="0"/>
-  <constraint name="W_0_8_0_a" index="181" slack="50000"/>
+  <constraint name="W_0_8_0_a" index="181" slack="70000"/>
   <constraint name="W_0_8_0_b" index="182" slack="0"/>
   <constraint name="W_0_8_0_c" index="183" slack="0"/>
   <constraint name="W_0_8_1_a" index="184" slack="0"/>
-  <constraint name="W_0_8_1_b" index="185" slack="70000"/>
-  <constraint name="W_0_8_1_c" index="186" slack="-50000"/>
-  <constraint name="W_0_8_2_a" index="187" slack="50000"/>
+  <constraint name="W_0_8_1_b" index="185" slack="50000"/>
+  <constraint name="W_0_8_1_c" index="186" slack="-70000"/>
+  <constraint name="W_0_8_2_a" index="187" slack="70000"/>
   <constraint name="W_0_8_2_b" index="188" slack="0"/>
   <constraint name="W_0_8_2_c" index="189" slack="0"/>
   <constraint name="W_1_8_0_a" index="190" slack="50000"/>
@@ -222,49 +222,49 @@
   <constraint name="W_1_8_2_a" index="196" slack="50000"/>
   <constraint name="W_1_8_2_b" index="197" slack="0"/>
   <constraint name="W_1_8_2_c" index="198" slack="0"/>
-  <constraint name="W_0_9_0_a" index="199" slack="60000"/>
+  <constraint name="W_0_9_0_a" index="199" slack="40000"/>
   <constraint name="W_0_9_0_b" index="200" slack="0"/>
   <constraint name="W_0_9_0_c" index="201" slack="0"/>
   <constraint name="W_0_9_1_a" index="202" slack="0"/>
-  <constraint name="W_0_9_1_b" index="203" slack="60000"/>
-  <constraint name="W_0_9_1_c" index="204" slack="-60000"/>
-  <constraint name="W_0_9_2_a" index="205" slack="60000"/>
+  <constraint name="W_0_9_1_b" index="203" slack="80000"/>
+  <constraint name="W_0_9_1_c" index="204" slack="-40000"/>
+  <constraint name="W_0_9_2_a" index="205" slack="40000"/>
   <constraint name="W_0_9_2_b" index="206" slack="0"/>
   <constraint name="W_0_9_2_c" index="207" slack="0"/>
-  <constraint name="W_1_9_0_a" index="208" slack="35000"/>
+  <constraint name="W_1_9_0_a" index="208" slack="80000"/>
   <constraint name="W_1_9_0_b" index="209" slack="0"/>
   <constraint name="W_1_9_0_c" index="210" slack="0"/>
   <constraint name="W_1_9_1_a" index="211" slack="0"/>
-  <constraint name="W_1_9_1_b" index="212" slack="85000"/>
-  <constraint name="W_1_9_1_c" index="213" slack="-35000"/>
-  <constraint name="W_1_9_2_a" index="214" slack="35000"/>
+  <constraint name="W_1_9_1_b" index="212" slack="40000"/>
+  <constraint name="W_1_9_1_c" index="213" slack="-80000"/>
+  <constraint name="W_1_9_2_a" index="214" slack="80000"/>
   <constraint name="W_1_9_2_b" index="215" slack="0"/>
   <constraint name="W_1_9_2_c" index="216" slack="0"/>
-  <constraint name="W_0_10_0_a" index="217" slack="60000"/>
+  <constraint name="W_0_10_0_a" index="217" slack="70000"/>
   <constraint name="W_0_10_0_b" index="218" slack="0"/>
   <constraint name="W_0_10_0_c" index="219" slack="0"/>
   <constraint name="W_0_10_1_a" index="220" slack="0"/>
-  <constraint name="W_0_10_1_b" index="221" slack="60000"/>
-  <constraint name="W_0_10_1_c" index="222" slack="-60000"/>
-  <constraint name="W_0_10_2_a" index="223" slack="60000"/>
+  <constraint name="W_0_10_1_b" index="221" slack="50000"/>
+  <constraint name="W_0_10_1_c" index="222" slack="-70000"/>
+  <constraint name="W_0_10_2_a" index="223" slack="70000"/>
   <constraint name="W_0_10_2_b" index="224" slack="0"/>
   <constraint name="W_0_10_2_c" index="225" slack="0"/>
-  <constraint name="W_1_10_0_a" index="226" slack="45000"/>
+  <constraint name="W_1_10_0_a" index="226" slack="50000"/>
   <constraint name="W_1_10_0_b" index="227" slack="0"/>
   <constraint name="W_1_10_0_c" index="228" slack="0"/>
   <constraint name="W_1_10_1_a" index="229" slack="0"/>
-  <constraint name="W_1_10_1_b" index="230" slack="75000"/>
-  <constraint name="W_1_10_1_c" index="231" slack="-45000"/>
-  <constraint name="W_1_10_2_a" index="232" slack="45000"/>
+  <constraint name="W_1_10_1_b" index="230" slack="70000"/>
+  <constraint name="W_1_10_1_c" index="231" slack="-50000"/>
+  <constraint name="W_1_10_2_a" index="232" slack="50000"/>
   <constraint name="W_1_10_2_b" index="233" slack="0"/>
   <constraint name="W_1_10_2_c" index="234" slack="0"/>
-  <constraint name="W_0_11_0_a" index="235" slack="50000"/>
+  <constraint name="W_0_11_0_a" index="235" slack="60000"/>
   <constraint name="W_0_11_0_b" index="236" slack="0"/>
   <constraint name="W_0_11_0_c" index="237" slack="0"/>
   <constraint name="W_0_11_1_a" index="238" slack="0"/>
-  <constraint name="W_0_11_1_b" index="239" slack="70000"/>
-  <constraint name="W_0_11_1_c" index="240" slack="-50000"/>
-  <constraint name="W_0_11_2_a" index="241" slack="50000"/>
+  <constraint name="W_0_11_1_b" index="239" slack="60000"/>
+  <constraint name="W_0_11_1_c" index="240" slack="-60000"/>
+  <constraint name="W_0_11_2_a" index="241" slack="60000"/>
   <constraint name="W_0_11_2_b" index="242" slack="0"/>
   <constraint name="W_0_11_2_c" index="243" slack="0"/>
   <constraint name="W_1_11_0_a" index="244" slack="60000"/>
@@ -279,7 +279,7 @@
  </linearConstraints>
  <variables>
   <variable name="W_0_0_0" index="0" value="0"/>
-  <variable name="W_0_0_1" index="1" value="50000"/>
+  <variable name="W_0_0_1" index="1" value="60000"/>
   <variable name="W_0_0_2" index="2" value="0"/>
   <variable name="W_1_0_0" index="3" value="0"/>
   <variable name="W_1_0_1" index="4" value="50000"/>
@@ -297,55 +297,55 @@
   <variable name="W_1_2_1" index="16" value="60000"/>
   <variable name="W_1_2_2" index="17" value="0"/>
   <variable name="W_0_3_0" index="18" value="0"/>
-  <variable name="W_0_3_1" index="19" value="40000"/>
+  <variable name="W_0_3_1" index="19" value="50000"/>
   <variable name="W_0_3_2" index="20" value="0"/>
   <variable name="W_1_3_0" index="21" value="0"/>
-  <variable name="W_1_3_1" index="22" value="50000"/>
+  <variable name="W_1_3_1" index="22" value="60000"/>
   <variable name="W_1_3_2" index="23" value="0"/>
   <variable name="W_0_4_0" index="24" value="0"/>
-  <variable name="W_0_4_1" index="25" value="40000"/>
+  <variable name="W_0_4_1" index="25" value="65000"/>
   <variable name="W_0_4_2" index="26" value="0"/>
   <variable name="W_1_4_0" index="27" value="0"/>
   <variable name="W_1_4_1" index="28" value="40000"/>
   <variable name="W_1_4_2" index="29" value="0"/>
   <variable name="W_0_5_0" index="30" value="0"/>
-  <variable name="W_0_5_1" index="31" value="50000"/>
+  <variable name="W_0_5_1" index="31" value="45000"/>
   <variable name="W_0_5_2" index="32" value="0"/>
   <variable name="W_1_5_0" index="33" value="0"/>
   <variable name="W_1_5_1" index="34" value="50000"/>
   <variable name="W_1_5_2" index="35" value="0"/>
   <variable name="W_0_6_0" index="36" value="0"/>
-  <variable name="W_0_6_1" index="37" value="60000"/>
+  <variable name="W_0_6_1" index="37" value="65000"/>
   <variable name="W_0_6_2" index="38" value="0"/>
   <variable name="W_1_6_0" index="39" value="0"/>
   <variable name="W_1_6_1" index="40" value="50000"/>
   <variable name="W_1_6_2" index="41" value="0"/>
   <variable name="W_0_7_0" index="42" value="0"/>
-  <variable name="W_0_7_1" index="43" value="50000"/>
+  <variable name="W_0_7_1" index="43" value="60000"/>
   <variable name="W_0_7_2" index="44" value="0"/>
   <variable name="W_1_7_0" index="45" value="0"/>
   <variable name="W_1_7_1" index="46" value="60000"/>
   <variable name="W_1_7_2" index="47" value="0"/>
   <variable name="W_0_8_0" index="48" value="0"/>
-  <variable name="W_0_8_1" index="49" value="50000"/>
+  <variable name="W_0_8_1" index="49" value="70000"/>
   <variable name="W_0_8_2" index="50" value="0"/>
   <variable name="W_1_8_0" index="51" value="0"/>
   <variable name="W_1_8_1" index="52" value="50000"/>
   <variable name="W_1_8_2" index="53" value="0"/>
   <variable name="W_0_9_0" index="54" value="0"/>
-  <variable name="W_0_9_1" index="55" value="60000"/>
+  <variable name="W_0_9_1" index="55" value="40000"/>
   <variable name="W_0_9_2" index="56" value="0"/>
   <variable name="W_1_9_0" index="57" value="0"/>
-  <variable name="W_1_9_1" index="58" value="35000"/>
+  <variable name="W_1_9_1" index="58" value="80000"/>
   <variable name="W_1_9_2" index="59" value="0"/>
   <variable name="W_0_10_0" index="60" value="0"/>
-  <variable name="W_0_10_1" index="61" value="60000"/>
+  <variable name="W_0_10_1" index="61" value="70000"/>
   <variable name="W_0_10_2" index="62" value="0"/>
   <variable name="W_1_10_0" index="63" value="0"/>
-  <variable name="W_1_10_1" index="64" value="45000"/>
+  <variable name="W_1_10_1" index="64" value="50000"/>
   <variable name="W_1_10_2" index="65" value="0"/>
   <variable name="W_0_11_0" index="66" value="0"/>
-  <variable name="W_0_11_1" index="67" value="50000"/>
+  <variable name="W_0_11_1" index="67" value="60000"/>
   <variable name="W_0_11_2" index="68" value="0"/>
   <variable name="W_1_11_0" index="69" value="0"/>
   <variable name="W_1_11_1" index="70" value="60000"/>
@@ -364,45 +364,45 @@
   <variable name="Y_1_5" index="83" value="0"/>
   <variable name="Y_0_6" index="84" value="0"/>
   <variable name="Y_1_6" index="85" value="0"/>
-  <variable name="Y_0_7" index="86" value="0"/>
+  <variable name="Y_0_7" index="86" value="5000"/>
   <variable name="Y_1_7" index="87" value="0"/>
-  <variable name="Y_0_8" index="88" value="0"/>
+  <variable name="Y_0_8" index="88" value="5000"/>
   <variable name="Y_1_8" index="89" value="0"/>
-  <variable name="Y_0_9" index="90" value="0"/>
+  <variable name="Y_0_9" index="90" value="20000"/>
   <variable name="Y_1_9" index="91" value="0"/>
   <variable name="Y_0_10" index="92" value="0"/>
-  <variable name="Y_1_10" index="93" value="0"/>
-  <variable name="Y_0_11" index="94" value="0"/>
+  <variable name="Y_1_10" index="93" value="20000"/>
+  <variable name="Y_0_11" index="94" value="10000"/>
   <variable name="Y_1_11" index="95" value="0"/>
   <variable name="Y_0_12" index="96" value="0"/>
   <variable name="Y_1_12" index="97" value="0"/>
-  <variable name="Z_0" index="98" value="-0"/>
+  <variable name="Z_0" index="98" value="0"/>
   <variable name="Z_1" index="99" value="1"/>
-  <variable name="Z_2" index="100" value="0"/>
+  <variable name="Z_2" index="100" value="-0"/>
   <variable name="cst" index="101" value="1"/>
-  <variable name="X_0_0" index="102" value="50000"/>
+  <variable name="X_0_0" index="102" value="60000"/>
   <variable name="X_1_0" index="103" value="50000"/>
   <variable name="X_0_1" index="104" value="60000"/>
   <variable name="X_1_1" index="105" value="60000"/>
   <variable name="X_0_2" index="106" value="60000"/>
   <variable name="X_1_2" index="107" value="60000"/>
-  <variable name="X_0_3" index="108" value="40000"/>
-  <variable name="X_1_3" index="109" value="50000"/>
-  <variable name="X_0_4" index="110" value="40000"/>
+  <variable name="X_0_3" index="108" value="50000"/>
+  <variable name="X_1_3" index="109" value="60000"/>
+  <variable name="X_0_4" index="110" value="65000"/>
   <variable name="X_1_4" index="111" value="40000"/>
-  <variable name="X_0_5" index="112" value="50000"/>
+  <variable name="X_0_5" index="112" value="45000"/>
   <variable name="X_1_5" index="113" value="50000"/>
-  <variable name="X_0_6" index="114" value="60000"/>
+  <variable name="X_0_6" index="114" value="65000"/>
   <variable name="X_1_6" index="115" value="50000"/>
-  <variable name="X_0_7" index="116" value="50000"/>
+  <variable name="X_0_7" index="116" value="60000"/>
   <variable name="X_1_7" index="117" value="60000"/>
-  <variable name="X_0_8" index="118" value="50000"/>
+  <variable name="X_0_8" index="118" value="70000"/>
   <variable name="X_1_8" index="119" value="50000"/>
-  <variable name="X_0_9" index="120" value="60000"/>
-  <variable name="X_1_9" index="121" value="35000"/>
-  <variable name="X_0_10" index="122" value="60000"/>
-  <variable name="X_1_10" index="123" value="45000"/>
-  <variable name="X_0_11" index="124" value="50000"/>
+  <variable name="X_0_9" index="120" value="40000"/>
+  <variable name="X_1_9" index="121" value="80000"/>
+  <variable name="X_0_10" index="122" value="70000"/>
+  <variable name="X_1_10" index="123" value="50000"/>
+  <variable name="X_0_11" index="124" value="60000"/>
   <variable name="X_1_11" index="125" value="60000"/>
  </variables>
 </CPLEXSolution>

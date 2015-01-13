@@ -2,17 +2,15 @@ package com.tp.edsi.controleurs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
-import javax.swing.JTextField;
 
 import com.tp.edsi.constantes.ConstantesVues;
 import com.tp.edsi.model.Modele;
+import com.tp.edsi.vue.CheckBox;
 import com.tp.edsi.vue.RadioBouton;
 
-public class Controleur implements ActionListener, FocusListener, ConstantesVues{
+public class Controleur implements ActionListener, ConstantesVues{
 	private Modele mdl;
 	
 	public Controleur(Modele mdl){
@@ -40,27 +38,17 @@ public class Controleur implements ActionListener, FocusListener, ConstantesVues
 			RadioBouton radioBouton = (RadioBouton) e.getSource();
 			mdl.setAlgorithme(radioBouton.getActionCommand());
 		}
-	}
-
-	@Override
-	public void focusGained(FocusEvent e) {
-		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void focusLost(FocusEvent e) {
-		if(e.getSource() instanceof JTextField){
-			JTextField stockInitial = (JTextField) e.getSource();
+		if(e.getSource() instanceof CheckBox){
+			CheckBox checkBox = (CheckBox) e.getSource();
 			
-			if(stockInitial.getName().equals(STOCK_INITIAL)){
-				try{
-					mdl.setStockInitial(Integer.parseInt(stockInitial.getText()));					
-				}
-				catch(NumberFormatException exception){
-					System.out.println("ERREUR !");
-					mdl.setStockInitial(0);
-				}
+			switch (checkBox.getActionCommand()) {
+				case STOCK_INITIAL:
+					mdl.setStockInitialized(checkBox.isSelected());
+					break;
+				case RESOLUTION_STOCHASTIQUE:
+					mdl.setStochasticSolved(checkBox.isSelected());
+					break;
 			}
 		}
 	}

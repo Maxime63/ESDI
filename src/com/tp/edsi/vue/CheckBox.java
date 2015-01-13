@@ -3,15 +3,15 @@ package com.tp.edsi.vue;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 
-import javax.swing.JRadioButton;
+import javax.swing.JCheckBox;
 
-public class RadioBouton extends JRadioButton {
+public class CheckBox extends JCheckBox {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public RadioBouton(String titre, Color backgroundColor, ActionListener actionListner, String actionCommand){
+	public CheckBox(String titre, Color backgroundColor, ActionListener actionListner, String actionCommand){
 		this.setText(titre);
 		this.setBackground(backgroundColor);
 		this.addActionListener(actionListner);
