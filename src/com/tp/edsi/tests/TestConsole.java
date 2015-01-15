@@ -17,7 +17,12 @@ public class TestConsole {
 				Solver solver = new Solver(data);
 				SolverStochastique solverStochastique = new SolverStochastique(data);
 				
-//				solver.solveProblem();
+				//Résolution normale
+				System.out.println("\n\nRESOLUTION NORMALE:");
+				solver.solveProblem();
+				
+				//Résolution stochastique
+				System.out.println("\n\nRESOLUTION STOCHASTIQUE:");
 				solverStochastique.solveProblem();
 			} catch (IloException e) {
 				// TODO Auto-generated catch block

@@ -12,16 +12,13 @@ import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.border.Border;
 
 import com.tp.edsi.constantes.ConstantesVues;
@@ -31,7 +28,6 @@ import com.tp.edsi.solver.Solver;
 
 public class Fenetre extends JFrame implements ConstantesVues, Observer{
 
-	/***/
 	private static final long serialVersionUID = 1L;
 
 	private Controleur ctrl;
@@ -96,7 +92,7 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 		//AFFICHAGE DE LA CONSOLE
 		gbc.gridx = 3;
 		gbc.gridwidth = 1;
-		gbc.gridheight = 9;
+		gbc.gridheight = 10;
 		gbc.insets = new Insets(0, 5, 0, 0);
 		console = new JTextArea();
 		console.setBackground(Color.WHITE);
@@ -105,7 +101,7 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 		consolePan.setPreferredSize(new Dimension(400, 350));
 		panneau.add(consolePan, gbc);
 
-		//LABEL STOCK INITIAL
+		//OPTION
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.gridwidth = 3;
@@ -125,7 +121,7 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 		panneau.add(panneauOptions, gbc);
 		//BOUTON POUR RESOUDRE LE PL
 		gbc.gridx = 1;
-		gbc.gridy = 3;
+		gbc.gridy = 4;
 		gbc.gridheight = 1;
 		gbc.gridwidth = 1;
 		gbc.insets = new Insets(10, 0, 10, 0);
@@ -134,7 +130,7 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 		
 		//AJOUT DES BOUTTONS POUR LES ALGOS
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		gbc.gridheight = 3;
 		gbc.gridwidth = 3;
 		gbc.fill = GridBagConstraints.BOTH;
@@ -162,7 +158,7 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 		
 		//BOUTON QUI APPLIQUE L'ALGO SELECTIONNE
 		gbc.gridx = 1;
-		gbc.gridy = 8;
+		gbc.gridy = 9;
 		gbc.gridheight = 1;
 		gbc.gridwidth = 1;
 		gbc.insets = new Insets(0, 0, 80, 0);
@@ -185,7 +181,12 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 						openFileChooser();
 						break;
 					case PROBLEM_SOLVE:
-						afficherResultatLp();
+						if(mdl.isStochasticSolved()){
+							afficherResultatStochastique();
+						}
+						else{
+							afficherResultatLp();							
+						}
 						if(mdl.isAlgoSelected()){
 							applicateAlgo.setEnabled(true);														
 						}
@@ -233,6 +234,21 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 		}
 	}
 
+	private void afficherResultatStochastique() {
+		StringBuilder resultatLpStoch = new StringBuilder();
+		resultatLpStoch.append("--------------------------RESOLUTION STOCHASTIQUE---------------------------\n");
+		resultatLpStoch.append("Solution optimale : ").append(mdl.getSolverStochastique().getSolution()).append("\n");
+		
+		int nbInvestissements = mdl.getSolverStochastique().getData().getNbInvestissements();
+		for(int i = 0; i < nbInvestissements; i++){
+			if(mdl.getSolverStochastique().getBestInvestissement(i) == 1.0){
+				resultatLpStoch.append("Meilleur investissement : ").append(i + 1).append("\n");
+			}
+		}
+		
+		console.setText(resultatLpStoch.toString());
+	}
+
 	private void openFileChooser() {
 		fileChooser.showOpenDialog(this);
 		String dataFilename = fileChooser.getSelectedFile().getAbsoluteFile().toString();
@@ -247,10 +263,8 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 		
 		StringBuilder resultatLp = new StringBuilder();
 		resultatLp.append("--------------------------RESOLUTION---------------------------\n");
-		
-		resultatLp.append("Stock initial : ").append(mdl.getSolver().getStockInitial()).append("\n\n\t");
-		
-		
+				
+		resultatLp.append("\t");
 		for(int i = 0; i < nbScenarios; i++){
 			resultatLp.append("Scenario ").append(i + 1).append("\t");
 		}
@@ -306,7 +320,7 @@ public class Fenetre extends JFrame implements ConstantesVues, Observer{
 		int bestInvestissement = 0;
 		
 		StringBuilder resultatMaxMinRegret = new StringBuilder();
-		resultatMaxMinRegret.append("--------------------------ALGO MAX MIN REGRET---------------------------\n\t");
+		resultatMaxMinRegret.append("--------------------------ALGO MAX MIN REGRET---------------------------\n");
 		
 		for(int i = 0; i < nbInvestissements; i++){
 			resultatMaxMinRegret.append("Inv ").append(i + 1).append("\t");

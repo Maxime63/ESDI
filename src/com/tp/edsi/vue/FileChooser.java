@@ -5,7 +5,6 @@ import java.awt.FlowLayout;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class FileChooser extends JFrame{
 

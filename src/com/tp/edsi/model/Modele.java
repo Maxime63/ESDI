@@ -51,10 +51,12 @@ public class Modele extends Observable implements ConstantesVues{
 			
 			if(isStochasticSolved){
 				solverStochastique = new SolverStochastique(data);
+				solverStochastique.setIsStockInitial(isStockIntialized);
 				solverStochastique.solveProblem();
 			}
 			else{
 				solver = new Solver(data);
+				solver.setIsStockInitial(isStockIntialized);
 				solver.solveProblem();				
 			}
 			isSolved = true;

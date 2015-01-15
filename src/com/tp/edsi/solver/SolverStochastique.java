@@ -1,6 +1,8 @@
 package com.tp.edsi.solver;
 
 import ilog.concert.IloException;
+import ilog.concert.IloLPMatrix;
+import ilog.concert.IloNumVar;
 import ilog.cplex.IloCplex;
 
 import java.io.BufferedWriter;
@@ -11,25 +13,26 @@ import java.io.OutputStreamWriter;
 
 import com.tp.edsi.metier.Data;
 
+/**Solver stochastique utilisé pour résoudre le programme linéaire et prennant en compte
+ * tous les investissements et tous les scénarios possibles.
+ * Il nous donnera la solution optimal et le meilleur investissement retenu.
+ * @author Maxime
+ */
 public class SolverStochastique {
 	public static final double UNSOLVABLE = -999999999999.99;
 	
 	private IloCplex cplex;
 	private Data data;
 	private int stockInitial;
-	
-	private String [] matriceLpFilename;
-	private double [] matriceResultats;
+	private boolean isStockInitial;
+	private double solution;
+	private double[] bestInvestissement;
 	
 	public SolverStochastique(Data data) throws IloException{
 		cplex = new IloCplex();
 		
 		this.data = data;
-		
-		//Initialisation des tableaux de résultats
-		matriceLpFilename = new String [data.getNbScenarios()];
-		matriceResultats = new double [data.getNbScenarios()];
-
+		bestInvestissement = new double[data.getNbScenarios()];
 	}
 	
 	public void setStockInitial(int stockInitial){
@@ -44,8 +47,20 @@ public class SolverStochastique {
 		return data;
 	}
 	
-	public void resolutionStochastique(){
-		
+	public double getSolution(){
+		return solution;
+	}
+	
+	public void setIsStockInitial(boolean isStockInitial){
+		this.isStockInitial = isStockInitial;
+	}
+	
+	public boolean isStockInitial(){
+		return isStockInitial;
+	}
+	
+	public double getBestInvestissement(int investissement){
+		return bestInvestissement[investissement];
 	}
 	
 	public void solveProblem() throws IloException, IOException{
@@ -57,13 +72,20 @@ public class SolverStochastique {
 		createLpFile(lpFilename);		
 		cplex.importModel(lpFilename);
 		cplex.solve();
-	}
-	
-	public double getSolution(int scenario){
-		return matriceResultats[scenario];
-	}
-	
+		solution = cplex.getObjValue();
 
+		IloLPMatrix lp = (IloLPMatrix)cplex.LPMatrixIterator().next();
+        IloNumVar[] vars = lp.getNumVars();
+        double[]    vals = cplex.getValues(vars);
+        
+        for (int i = 0; i < vals.length; i++) {
+        	String var = vars[i].getName().substring(0, 2);
+        	if(var.equals("Z_")){
+        		int investissement = Integer.valueOf(vars[i].getName().substring(2, 3));
+        		bestInvestissement[investissement] = vals[i];
+        	}
+         }
+	}
 	
 	private void createLpFile(String lpFilename) throws IOException{
 		OutputStream ops = new FileOutputStream(lpFilename); 
@@ -72,7 +94,6 @@ public class SolverStochastique {
 		
 		int nbInvestissements = data.getNbInvestissements();
 		int nbScenarios = data.getNbScenarios();
-		int nbPeriodes = data.getNbPeriodes();
 		int nbProduits = data.getNbProduits();
 		
 		bw.write("Maximize\n");
@@ -95,12 +116,11 @@ public class SolverStochastique {
 		
 		for(int j = 0; j < nbProduits; j++){
 			for(int k = 0; k < nbScenarios; k++){
-				bw.write("Y_0_" + j + "_" + k + " = " + stockInitial);
+				bw.write("Y_" + j + "_0_" + k + " = " + stockInitial);
 				bw.write("\n");
 			}
 		}
 		
-		bw.write("\n");
 		bw.write("\n");
 		bw.write("Binaries\n");
 		for(int i = 0; i < nbInvestissements; i++){
@@ -127,7 +147,7 @@ public class SolverStochastique {
 				otherConstraint.append(" + ");
 			}
 		}
-		otherConstraint.append(" = 1\n");
+		otherConstraint.append(" = 1 \n");
 		
 		for(int i = 0; i < nbPeriodes; i++){
 			for(int j = 0; j < nbProduits; j++){
@@ -174,40 +194,44 @@ public class SolverStochastique {
 					//COUT DE STOCKAGE
 					for(int k = 0; k < nbScenarios; k++){
 						stockage.append("-")
-						.append(data.getStockage()/3)
+						.append(data.getStockage()/3.0)
 						.append(" Y_").append(j).append("_").append(i).append("_").append(k).append(" ");						
 					}
+					stockage.append("\n");
 				}
 				else{
 					//COUT DES VENTES (prix de vente * la demande)
 					for(int k=0; k < nbScenarios; k++){
-						vente += (data.getPrix(j) * data.getPeriode(i).getDemande(j, k))/3;						
+						vente += (data.getPrix(j) * data.getPeriode(i).getDemande(j, k))/3.0;						
 					}
 
 					//COUT DE PRODUCTION
 					for(int k = 0; k < nbInvestissements; k++){
 						for(int l = 0; l < nbScenarios; l++){
 							production.append("-")
-							  .append(data.getInvestissement(k).getCoutProduction()/3)
+							  .append(data.getInvestissement(k).getCoutProduction()/3.0)
 							  .append(" W_").append(j).append("_").append(i).append("_").append(k).append("_").append(l).append(" ");							
 						}
 					}
+					production.append("\n");
 
 					//COUT DE STOCKAGE
 					for(int k = 0; k < nbScenarios; k++){
 						stockage.append("-")
-						.append(data.getStockage()/3)
+						.append(data.getStockage()/3.0)
 						.append(" Y_").append(j).append("_").append(i).append("_").append(k).append(" ");						
 					}
+					stockage.append("\n");
 					
 					//COUT AMMORTISSEMENT
 					for(int k = 0; k < nbInvestissements; k++){
 						for(int l = 0; l < nbScenarios; l++){
 							ammortissement.append("+")
-							  .append(data.getAmortissement()/3)
+							  .append(data.getAmortissement()/3.0)
 							  .append(" W_").append(j).append("_").append(i).append("_").append(k).append("_").append(l).append(" ");							
 						}
 					}
+					ammortissement.append("\n");
 				}
 			}
 		}
@@ -233,7 +257,7 @@ public class SolverStochastique {
 		return maxFunction.toString();
 	}
 	
-	public String createCapaConstraint(){
+	private String createCapaConstraint(){
 		StringBuilder capaConstraint = new StringBuilder();
 		
 		int nbProduits = data.getNbProduits();
@@ -242,27 +266,26 @@ public class SolverStochastique {
 		int nbScenarios = data.getNbScenarios();
 		
 		for(int i = 0; i < nbPerdiodes; i++){
-			capaConstraint.append("Capa_").append(i).append(": ");
-			for(int j = 0; j < nbProduits; j++){
-				for(int k = 0; k < nbScenarios; k++){
+			for(int k = 0; k < nbScenarios; k++){
+				capaConstraint.append("Capa_").append(i).append("_").append(k).append(": ");
+				for(int j = 0; j < nbProduits; j++){
 					capaConstraint.append("X_").append(j).append("_").append(i).append("_").append(k);
-					if((k < nbScenarios - 1) && (j < nbProduits - 1)){
+					if(j < nbProduits - 1){
 						capaConstraint.append(" + ");
-					}
-				}				
+					}									
+				}
+				for(int l =  0; l < nbInvestissements; l++){
+					capaConstraint.append(" - ").append(data.getInvestissement(l).getCapacite()).append(" Z_").append(l);
+				}			
+
+				capaConstraint.append(" <= 0\n");
 			}
-			
-			for(int k =  0; k < nbInvestissements; k++){
-				capaConstraint.append(" - ").append(data.getInvestissement(k).getCapacite()).append(" Z_").append(k);
-			}
-			
-			capaConstraint.append(" <= 0\n");
 		}
 		
 		return capaConstraint.toString();
 	}
 	
-	public String createStockConstraint(){
+	private String createStockConstraint(){
 		StringBuilder stockConstraint = new StringBuilder();
 		
 		int nbProduits = data.getNbProduits();
@@ -271,13 +294,13 @@ public class SolverStochastique {
 		
 		for(int i = 0; i < nbPerdiodes; i++){
 			for(int j = 0; j < nbProduits; j++){
-				for(int k = 0; k < nbScenarios; k++){					
+				for(int k = 0; k < nbScenarios; k++){
 					stockConstraint.append("stock_").append(j).append("_").append(i).append("_").append(k).append(": ")
-					   .append("Y_").append(j).append("_").append(i + 1).append("_").append(k).append(" - ")
-					   .append("Y_").append(j).append("_").append(i).append("_").append(k).append(" - ")
-					   .append("X_").append(j).append("_").append(i).append("_").append(k).append(" = ")
-					   .append(" -").append(data.getPeriode(i).getDemande(j, k))
-					   .append("\n");
+					   .append("Y_").append(j).append("_").append(i).append("_").append(k).append(" + ")
+					   .append("X_").append(j).append("_").append(i).append("_").append(k).append(" - ")
+					   .append("Y_").append(j).append("_").append(i + 1).append("_").append(k).append(" = ")
+					   .append(data.getPeriode(i).getDemande(j, k))
+					   .append("\n");					
 				}
 			}
 		}

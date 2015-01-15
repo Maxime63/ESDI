@@ -11,17 +11,33 @@ import ilog.cplex.IloCplex;
 
 import com.tp.edsi.metier.Data;
 
+/**
+ * Solver utilisé pour résoudre le programme linéaire selon un investissement
+ * donné et un scénario donné.
+ * @author Maxime
+ */
 public class Solver {
 	public static final double UNSOLVABLE = -999999999999.99;
 	
+	/**Solver CPlex*/
 	private IloCplex cplex;
+	/**Les données chargées*/
 	private Data data;
-	private int stockInitial;
 	
+	/**Si il y a un stock initial ou non*/
+	private boolean isStockInitial;
+	/**Le prix du stock initial*/
+	private static final double PRIX_STOCK_INITIAL = 1000;
+	
+	/**Le nom des fichiers lp correspondant*/
 	private String [][] matriceLpFilename;
+	/**Les résultats correspondant au différent modèle lp*/
 	private double [][] matriceResultats;
+	/**Les résultats après l'application de l'algorithme moyenne.*/
 	private double [] resultatsMoyenne;
+	/**Les résultats après l'application de l'algorithme MaxMinAbsolu.*/
 	private double [] resultatsMaxMinAbsolu;
+	/**Les résultats après l'application de l'algorithme MaxMinRegret.*/
 	private double [] resultatsMaxMinRegret;
 	
 	public Solver(Data data) throws IloException{
@@ -38,18 +54,21 @@ public class Solver {
 
 	}
 	
-	public void setStockInitial(int stockInitial){
-		this.stockInitial = stockInitial;
+	public void setIsStockInitial(boolean isStockInitial){
+		this.isStockInitial = isStockInitial;
 	}
 	
-	public int getStockInitial(){
-		return stockInitial;
+	public boolean isStockInitial(){
+		return isStockInitial;
 	}
 	
 	public Data getData(){
 		return data;
 	}
 	
+	/**
+	 * Algorithme MaxMinAbsolu
+	 */
 	public void maxMinAbsolu(){
 		int nbScenarios = data.getNbScenarios();
 		int nbInvestissements = data.getNbInvestissements();
@@ -70,6 +89,9 @@ public class Solver {
 		return resultatsMaxMinAbsolu[scenario];
 	}
 	
+	/**
+	 * Algorithme MaxMinRegret
+	 */
 	public void maxMinRegret(){
 		int nbScenarios = data.getNbScenarios();
 		int nbInvestissements = data.getNbInvestissements();
@@ -107,6 +129,9 @@ public class Solver {
 		return resultatsMaxMinRegret[investissement];
 	}
 
+	/**
+	 * Algorithme moyenne
+	 */
 	public void moyenne(){
 		int nbScenarios = data.getNbScenarios();
 		int nbInvestissements = data.getNbInvestissements();
@@ -125,6 +150,11 @@ public class Solver {
 		return resultatsMoyenne[investissement];
 	}
 	
+	/**Résolution du problème : on créé un fichier lp pour chaque couple de scénario, 
+	 * investissement et on récupère le résultat.
+	 * @throws IloException
+	 * @throws IOException
+	 */
 	public void solveProblem() throws IloException, IOException{
 		int nbScenarios = data.getNbScenarios();
 		int nbInvestissements = data.getNbInvestissements();
@@ -157,6 +187,12 @@ public class Solver {
 	
 
 	
+	/**Création du modèle LP
+	 * @param lpFilename
+	 * @param investissement
+	 * @param scenario
+	 * @throws IOException
+	 */
 	private void createLpFile(String lpFilename, int investissement, int scenario) throws IOException{
 		OutputStream ops = new FileOutputStream(lpFilename); 
 		OutputStreamWriter opsw = new OutputStreamWriter(ops);
@@ -179,9 +215,11 @@ public class Solver {
 		bw.write("\n");
 		
 		//STOCK INITIAUX
-		bw.write("Y_0_0 = " + stockInitial);
-		bw.write("\n");
-		bw.write("Y_1_0 = " + stockInitial);
+		if(isStockInitial){
+			bw.write("Y_0_0 = 0");
+			bw.write("\n");
+			bw.write("Y_1_0 = 0");			
+		}
 		
 		bw.write("\n");
 		bw.write("End");
@@ -237,8 +275,14 @@ public class Solver {
 		ammort = data.getAmortissement() * nbPeriodes * data.getInvestissement(investissement).getCapacite();
 		
 		//CREATION DE LA FONCTION DE MAXIMISATION
-		maxFunction.append(production).append(stockage).append(ammortissement).append(" +")
-				   .append(vente - achat - ammort).append(" cst");
+		maxFunction.append(production).append(stockage).append(ammortissement);
+		
+		if(!isStockInitial){
+			maxFunction.append(" - ").append(PRIX_STOCK_INITIAL).append("Y_0_0");
+			maxFunction.append(" - ").append(PRIX_STOCK_INITIAL).append("Y_1_0");
+		}
+				
+		maxFunction.append(" +").append(vente - achat - ammort).append(" cst");
 		
 		
 		return maxFunction.toString();
